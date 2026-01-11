@@ -9,9 +9,9 @@ where "rating" in ('R');
 
 -- 3. Encuentra los nombres de los actores que tengan un “actor_id” entre 30
 y 40.
-select "actor_id" 
-from actor a  
-where "actor_id" between 30 and 40; 
+SELECT first_name AS "Nombre"
+FROM actor
+WHERE actor_id BETWEEN 30 AND 40; 
 
 -- 4. Obtén las películas cuyo idioma coincide con el idioma original.
 select "title" 
@@ -43,11 +43,6 @@ select "title"
 from film f  
 where "rating" = 'PG-13' 
 or "length" > 180; 
-Si no solo queremos ver la columna “title” sinó que también queremos la columna “rating” y “length”: 
-select "title","rating","length" 
-from film f  
-where "rating" = 'PG-13' 
-and "length" > 180; 
 
 -- 9. Encuentra la variabilidad de lo que costaría reemplazar las películas.
 select  
@@ -81,10 +76,9 @@ ORDER BY r.rental_date DESC
 OFFSET 2 LIMIT 1; 
 
 -- 12. Encuentra el título de las películas en la tabla “film” que no sean ni ‘NC￾17’ ni ‘G’ en cuanto a su clasificación.
-select p.amount, r.rental_date 
-SELECT title, rating 
-FROM film 
-WHERE rating NOT IN ('NC-17', 'G');
+select "title"
+from film f 
+where rating not in ('NC-17' , 'G');
 
 -- 13. Encuentra el promedio de duración de las películas para cada
 clasificación de la tabla film y muestra la clasificación junto con el
@@ -202,12 +196,15 @@ ORDER BY numero_peliculas DESC;
 
 -- 29. Obtener todas las películas y, si están disponibles en el inventario,
 mostrar la cantidad disponible.
-SELECT f.title, 
-       COUNT(i.inventory_id) AS cantidad_disponible 
-FROM film f 
-LEFT JOIN inventory i ON f.film_id = i.film_id 
-GROUP BY f.title 
-ORDER BY cantidad_disponible DESC; 
+select 	
+	f.film_id,
+	f.title,
+	count(i.inventory_id) as Cantidad_disponible
+from film f 
+left join inventory i 
+	on f.film_id = i.film_id 
+group by f.film_id , f.title 
+order by f.title; 
 
 -- 30. Obtener los actores y el número de películas en las que ha actuado.
 SELECT a.first_name || ' ' || a.last_name AS nombre_completo, 
@@ -469,7 +466,7 @@ join film_actor fa on a.actor_id = fa.actor_id
 join film f on fa.film_id = f.film_id  
 join film_category fc on f.film_id = fc.film_id  
 join category c  on fc.category_id = c.category_id  
-where c.name = 'Sci-fi' 
+where c.name = 'Sci-Fi' 
 order by a.last_name , a.first_name ; 
 
 -- 55. Encuentra el nombre y apellido de los actores que han actuado en
@@ -591,4 +588,5 @@ SELECT c.customer_id,
 FROM customer c 
 JOIN rental r ON c.customer_id = r.customer_id 
 GROUP BY c.customer_id, c.first_name, c.last_name 
+
 ORDER BY c.last_name, c.first_name; 
